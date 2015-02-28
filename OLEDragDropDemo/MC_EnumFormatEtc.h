@@ -24,14 +24,13 @@ public:
 	HRESULT __stdcall  Reset ();
 	HRESULT __stdcall  Clone (IEnumFORMATETC** vPpEnumFormatEtc);
 
-	HRESULT CreateEnumFormatEtc	 (UINT vFormatCount, FORMATETC* vFormat, IEnumFORMATETC** vPpEnumFormatEtc);
-
 	//Cons/Destructors
 	MC_EnumFormatEtc(FORMATETC* vFormatEtc, ULONG vFormatsCount);
 	~MC_EnumFormatEtc();
 
 private:
-	static void DeepCopyFormatEtc	 (FORMATETC* vDest, FORMATETC* vSource);
+	static HRESULT CreateEnumFormatEtc	(UINT vFormatCount, FORMATETC* vFormat, IEnumFORMATETC** vPpEnumFormatEtc);
+	static void DeepCopyFormatEtc		(FORMATETC* vDest, FORMATETC* vSource);
 
 	LONG        m_RefCount;        // COM reference count
 	ULONG       m_Index;
