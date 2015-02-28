@@ -19,20 +19,21 @@ public:
 	STDMETHODIMP 	QueryInterface	(REFIID vRIID, void** vPpvObject);
 
 	// IEnumFormatEtc interface
-    HRESULT __stdcall  Next  (ULONG vCelt, FORMATETC* vFormatEtc, ULONG* vCeltFetched);
-    HRESULT __stdcall  Skip  (ULONG vCelt);
-    HRESULT __stdcall  Reset ();
-    HRESULT __stdcall  Clone (IEnumFORMATETC** vPpEnumFormatEtc);
+	HRESULT __stdcall  Next  (ULONG vCelt, FORMATETC* vFormatEtc, ULONG* vCeltFetched);
+	HRESULT __stdcall  Skip  (ULONG vCelt);
+	HRESULT __stdcall  Reset ();
+	HRESULT __stdcall  Clone (IEnumFORMATETC** vPpEnumFormatEtc);
 
-	void	DeepCopyFormatEtc	 (FORMATETC* vDest, FORMATETC* vSource);
 	HRESULT CreateEnumFormatEtc	 (UINT vFormatCount, FORMATETC* vFormat, IEnumFORMATETC** vPpEnumFormatEtc);
 
-    //Cons/Destructors
-    MC_EnumFormatEtc(FORMATETC* vFormatEtc, ULONG vFormatsCount);
-    ~MC_EnumFormatEtc(void);
+	//Cons/Destructors
+	MC_EnumFormatEtc(FORMATETC* vFormatEtc, ULONG vFormatsCount);
+	~MC_EnumFormatEtc();
 
 private:
-    LONG        m_RefCount;        // COM reference count
+	static void DeepCopyFormatEtc	 (FORMATETC* vDest, FORMATETC* vSource);
+
+	LONG        m_RefCount;        // COM reference count
 	ULONG       m_Index;
 	ULONG       m_FormatsCount;
 	FORMATETC*  m_FormatEtc;
