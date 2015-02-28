@@ -55,6 +55,10 @@ STDMETHODIMP MC_DropSource::QueryContinueDrag(BOOL vEscapePressed, DWORD vKeySta
 	return vEscapePressed ? DRAGDROP_S_CANCEL : ((vKeyState&MK_LBUTTON) ? S_OK : DRAGDROP_S_DROP);
 }
 //----------------------------------------------------------------------------
+// GiveFeedback is responsible for changing the cursor shape or for changing
+// the highlighted source based on the value of its parameter.
+// Returning DRAGDROP_S_USEDEFAULTCURSORS causes OLE to update the cursor for
+// you, using its defaults.
 STDMETHODIMP MC_DropSource::GiveFeedback(DWORD)
 {
 	return DRAGDROP_S_USEDEFAULTCURSORS;
