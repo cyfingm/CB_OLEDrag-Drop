@@ -8,11 +8,10 @@
 #include "MC_EnumFormatEtc.h"
 //----------------------------------------------------------------------------
 MC_EnumFormatEtc::MC_EnumFormatEtc(FORMATETC* vFormatEtc, ULONG vFormatsCount)
-: m_RefCount(1), m_Index(0), m_FormatsCount(vFormatsCount)
+: m_RefCount(1), m_Index(0), m_FormatsCount(vFormatsCount),
+  m_FormatEtc(new FORMATETC[vFormatsCount])
 {
-    m_FormatEtc = new FORMATETC[vFormatsCount];
-
-    for(ULONG i = 0; i < vFormatsCount; i++)
+    for (ULONG i = 0; i < vFormatsCount; ++i)
         DeepCopyFormatEtc(&m_FormatEtc[i], &vFormatEtc[i]);
 }
 //----------------------------------------------------------------------------
