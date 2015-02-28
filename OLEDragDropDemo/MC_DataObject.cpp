@@ -33,31 +33,32 @@ ULONG __stdcall MC_DataObject::Release()
 //----------------------------------------------------------------------------
 STDMETHODIMP MC_DataObject::QueryInterface(REFIID vRIID, void** vPpvObject) 
 {
+	if (!vPpvObject)
+		return E_POINTER;
+
 	if (vRIID == IID_IUnknown || vRIID == IID_IDataObject)
 		{
         *vPpvObject = this;
         AddRef();
         return S_OK;
 		}
-    else
-		{
+
         *vPpvObject = 0;
         return E_NOINTERFACE;
-		}
 }
 //----------------------------------------------------------------------------
 HRESULT __stdcall MC_DataObject::GetData(FORMATETC *vFormatEtc, STGMEDIUM *vStorageMedium)
 {
 	//Lookup for requierd format data object
-    int tIndex = LookupFormatEtc(vFormatEtc);
-    if (tIndex == -1)
-        return DV_E_FORMATETC;
+	int tIndex = LookupFormatEtc(vFormatEtc);
+	if (tIndex == -1)
+		return DV_E_FORMATETC;
 
-    vStorageMedium->tymed           = m_FormatEtc[tIndex].tymed;
-    vStorageMedium->pUnkForRelease  = 0;
+	vStorageMedium->tymed           = m_FormatEtc[tIndex].tymed;
+	vStorageMedium->pUnkForRelease  = 0;
 
 	//Store data object to vStorageMedium
-    switch(m_FormatEtc[tIndex].tymed)
+	switch(m_FormatEtc[tIndex].tymed)
 		{
 		case TYMED_HGLOBAL:
 			vStorageMedium->hGlobal = DupGlobalMem(m_StgMedium[tIndex].hGlobal);
@@ -67,8 +68,9 @@ HRESULT __stdcall MC_DataObject::GetData(FORMATETC *vFormatEtc, STGMEDIUM *vStor
 			break;
 		default:
 			return DV_E_FORMATETC;
-    	}
-    return S_OK;
+		}
+
+	return S_OK;
 }
 //----------------------------------------------------------------------------
 HRESULT __stdcall MC_DataObject::GetDataHere(FORMATETC *, STGMEDIUM *)
