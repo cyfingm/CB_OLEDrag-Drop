@@ -49,6 +49,9 @@ STDMETHODIMP MC_DataObject::QueryInterface(REFIID vRIID, void** vPpvObject)
 //----------------------------------------------------------------------------
 HRESULT __stdcall MC_DataObject::GetData(FORMATETC *vFormatEtc, STGMEDIUM *vStorageMedium)
 {
+	if (!vFormatEtc || !vStorageMedium)
+		return E_INVALIDARG;
+
 	//Lookup for requierd format data object
 	int tIndex = LookupFormatEtc(vFormatEtc);
 	if (tIndex == -1)
