@@ -45,9 +45,9 @@ public:
 
 private:
 	static HRESULT CreateEnumFormatEtc(UINT vFormatCount, FORMATETC* vFormat, IEnumFORMATETC** vPpEnumFormatEtc);
+	static HGLOBAL DupGlobalMem(HGLOBAL vSourceMem);
 
-	HGLOBAL DupGlobalMem	(HGLOBAL vSourceMem);
-	int LookupFormatEtc	(FORMATETC* vFormatEtc) const;
+	int LookupFormatEtc(FORMATETC* vFormatEtc) const;
 
 	ULONG m_RefCount;										// COM reference count
 
