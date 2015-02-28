@@ -103,7 +103,7 @@ HRESULT __stdcall MC_DataObject::SetData(FORMATETC *, STGMEDIUM *, BOOL)
 HRESULT __stdcall MC_DataObject::EnumFormatEtc(DWORD vDirection, IEnumFORMATETC **vPpEnumFormatEtc)
 {
 	if (vDirection == DATADIR_GET)
-		return vPpEnumFormatEtc ? CreateEnumFormatEtc(m_FormatEtc.size(), &m_FormatEtc[0], vPpEnumFormatEtc) : E_INVALID_ARG;
+		return vPpEnumFormatEtc ? CreateEnumFormatEtc(m_FormatEtc.size(), &m_FormatEtc[0], vPpEnumFormatEtc) : E_INVALIDARG;
 	else
 	        return E_NOTIMPL;
 }
