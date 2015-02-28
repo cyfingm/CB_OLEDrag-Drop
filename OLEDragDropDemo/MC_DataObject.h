@@ -17,37 +17,37 @@ class MC_DataObject : public IDataObject
 {
 public:
 	//COM interface
-	ULONG __stdcall AddRef			();
-	ULONG __stdcall Release			();
+	ULONG __stdcall AddRef		();
+	ULONG __stdcall Release		();
 	STDMETHODIMP	QueryInterface	(REFIID vRIID, void** vPpvObject);
 
 	//IDataObject interface
-	STDMETHODIMP GetData				(FORMATETC* vFormatEtc, STGMEDIUM* vStorageMedium);
-	STDMETHODIMP GetDataHere			(FORMATETC* vFormatEtc, STGMEDIUM* vStorageMedium);
-	STDMETHODIMP QueryGetData			(FORMATETC* vFormatEtc);
+	STDMETHODIMP GetData			(FORMATETC* vFormatEtc, STGMEDIUM* vStorageMedium);
+	STDMETHODIMP GetDataHere		(FORMATETC* vFormatEtc, STGMEDIUM* vStorageMedium);
+	STDMETHODIMP QueryGetData		(FORMATETC* vFormatEtc);
 	STDMETHODIMP GetCanonicalFormatEtc	(FORMATETC* vFormatEctIn, FORMATETC* vFormatEtcOut);
-	STDMETHODIMP SetData				(FORMATETC* vFormatEct, STGMEDIUM* vStorageMedium, BOOL vRelease);
-	STDMETHODIMP EnumFormatEtc			(DWORD vDirection, IEnumFORMATETC** vPpEnumFormatEtc);
-	STDMETHODIMP DAdvise				(FORMATETC* vFormatEct, DWORD vAdvf, IAdviseSink* vAdvSink, DWORD* vConnection);
-	STDMETHODIMP DUnadvise				(DWORD vConnection);
-	STDMETHODIMP EnumDAdvise			(IEnumSTATDATA** vPpEnumAdvise);
+	STDMETHODIMP SetData			(FORMATETC* vFormatEct, STGMEDIUM* vStorageMedium, BOOL vRelease);
+	STDMETHODIMP EnumFormatEtc		(DWORD vDirection, IEnumFORMATETC** vPpEnumFormatEtc);
+	STDMETHODIMP DAdvise			(FORMATETC* vFormatEct, DWORD vAdvf, IAdviseSink* vAdvSink, DWORD* vConnection);
+	STDMETHODIMP DUnadvise			(DWORD vConnection);
+	STDMETHODIMP EnumDAdvise		(IEnumSTATDATA** vPpEnumAdvise);
 
 	//Cons/Destructors
 	MC_DataObject();
 	~MC_DataObject();
 
-	void	Add				(FORMATETC* vFormatEtc, STGMEDIUM* vStorageMedium, UINT vCount);
-	void	Add				(CLIPFORMAT vClipboardFormat, DWORD vTymed, void* vUnionContent);
-	size_t	Size			();
-	bool	Empty			();
-	void	Clear			();
+	void	Add		(FORMATETC* vFormatEtc, STGMEDIUM* vStorageMedium, UINT vCount);
+	void	Add		(CLIPFORMAT vClipboardFormat, DWORD vTymed, void* vUnionContent);
+	size_t	Size		();
+	bool	Empty		();
+	void	Clear		();
 	void	ClearAndRelease	();
 
 private:
-	HGLOBAL DupGlobalMem	(HGLOBAL vSourceMem);
-	int		LookupFormatEtc	(FORMATETC* vFormatEtc);
+	static HRESULT CreateEnumFormatEtc(UINT vFormatCount, FORMATETC* vFormat, IEnumFORMATETC** vPpEnumFormatEtc);
 
-	HRESULT CreateEnumFormatEtc(UINT vFormatCount, FORMATETC* vFormat, IEnumFORMATETC** vPpEnumFormatEtc);
+	HGLOBAL DupGlobalMem	(HGLOBAL vSourceMem);
+	int LookupFormatEtc	(FORMATETC* vFormatEtc);
 
 	ULONG m_RefCount;										// COM reference count
 
