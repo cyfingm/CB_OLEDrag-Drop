@@ -14,14 +14,14 @@ class MC_EnumFormatEtc : public IEnumFORMATETC
 {
 public:
 	//COM interface
-	ULONG __stdcall AddRef			(void);
-	ULONG __stdcall Release			(void);
+	ULONG __stdcall AddRef			();
+	ULONG __stdcall Release			();
 	STDMETHODIMP 	QueryInterface	(REFIID vRIID, void** vPpvObject);
 
 	// IEnumFormatEtc interface
     HRESULT __stdcall  Next  (ULONG vCelt, FORMATETC* vFormatEtc, ULONG* vCeltFetched);
     HRESULT __stdcall  Skip  (ULONG vCelt);
-    HRESULT __stdcall  Reset (void);
+    HRESULT __stdcall  Reset ();
     HRESULT __stdcall  Clone (IEnumFORMATETC** vPpEnumFormatEtc);
 
 	void	DeepCopyFormatEtc	 (FORMATETC* vDest, FORMATETC* vSource);
