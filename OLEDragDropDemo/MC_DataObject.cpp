@@ -179,12 +179,27 @@ void MC_DataObject::ClearAndRelease(void)
 //----------------------------------------------------------------------------
 HGLOBAL MC_DataObject::DupGlobalMem(HGLOBAL vSourceMem)
 {
-	DWORD tLen    = GlobalSize(vSourceMem);
-	PVOID tSource = GlobalLock(vSourceMem);
-	PVOID tDest   = GlobalAlloc(GMEM_FIXED, tLen);
-	std::memcpy (tDest, tSource, tLen);
-    GlobalUnlock(vSourceMem);
-	return tDest;
+	PVOID tDest = 0, tSource = 0;
+	
+	try
+	{
+		DWORD tLen = GlobalSize(vSourceMem);
+		tSource    = GlobalLock(vSourceMem);
+		tDest      = GlobalAlloc(GMEM_FIXED, tLen);
+
+		std::memcpy(tDest, tSource, tLen);
+		GlobalUnlock(vSourceMem);
+
+		return tDest;
+	}
+	catch(...)
+	{
+		if (tDest)
+			GlobalFree(tDest);
+		if (tSource)
+			GlobalUnlock(vSourceMem);
+		throw;
+	}
 }
 //----------------------------------------------------------------------------
 HRESULT MC_DataObject::CreateEnumFormatEtc(UINT vFormatCount, FORMATETC* vFormat, IEnumFORMATETC** vPpEnumFormatEtc)
