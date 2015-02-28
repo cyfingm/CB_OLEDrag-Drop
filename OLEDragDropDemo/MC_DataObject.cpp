@@ -100,12 +100,12 @@ HRESULT __stdcall MC_DataObject::SetData(FORMATETC *, STGMEDIUM *, BOOL)
     return E_NOTIMPL;
 }
 //----------------------------------------------------------------------------
-HRESULT __stdcall MC_DataObject::EnumFormatEtc(DWORD vDirection, IEnumFORMATETC** vPpEnumFormatEtc)
+HRESULT __stdcall MC_DataObject::EnumFormatEtc(DWORD vDirection, IEnumFORMATETC **vPpEnumFormatEtc)
 {
-	if(vDirection == DATADIR_GET)
-		return CreateEnumFormatEtc(m_FormatEtc.size(), &m_FormatEtc[0], vPpEnumFormatEtc);
+	if (vDirection == DATADIR_GET)
+		return vPpEnumFormatEtc ? CreateEnumFormatEtc(m_FormatEtc.size(), &m_FormatEtc[0], vPpEnumFormatEtc) : E_INVALID_ARG;
 	else
-        return E_NOTIMPL;
+	        return E_NOTIMPL;
 }
 //----------------------------------------------------------------------------
 HRESULT __stdcall MC_DataObject::DAdvise(FORMATETC *, DWORD, IAdviseSink *, DWORD *)
