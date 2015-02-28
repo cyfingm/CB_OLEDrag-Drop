@@ -8,25 +8,23 @@
 //----------------------------------------------------------------------------
 #include "MC_DropSource.h"
 //----------------------------------------------------------------------------
-MC_DropSource::MC_DropSource(void)
+MC_DropSource::MC_DropSource()
 :m_RefCount(1)
 {
-	;
 }
 //----------------------------------------------------------------------------
-MC_DropSource::~MC_DropSource(void)
+MC_DropSource::~MC_DropSource()
 {
-	;
 }
 //----------------------------------------------------------------------------
 //COM 接口成员:AddRef
-ULONG __stdcall MC_DropSource::AddRef(void)
+ULONG __stdcall MC_DropSource::AddRef()
 {
 	return ++m_RefCount;
 }
 //----------------------------------------------------------------------------
 //COM 接口成员:Release
-ULONG __stdcall MC_DropSource::Release(void)
+ULONG __stdcall MC_DropSource::Release()
 {
 	--m_RefCount;
 
@@ -39,7 +37,7 @@ ULONG __stdcall MC_DropSource::Release(void)
 //COM 接口成员:QueryInterface
 STDMETHODIMP MC_DropSource::QueryInterface(REFIID vRIID, void** vPpvObject) 
 {
-	if((vRIID == IID_IUnknown)||(vRIID == IID_IDataObject))
+	if (vRIID == IID_IUnknown || vRIID == IID_IDataObject)
 		{
         *vPpvObject = this;
         AddRef();
@@ -57,9 +55,8 @@ STDMETHODIMP MC_DropSource::QueryContinueDrag(BOOL vEscapePressed, DWORD vKeySta
 	return vEscapePressed ? DRAGDROP_S_CANCEL : ((vKeyState&MK_LBUTTON) ? S_OK : DRAGDROP_S_DROP);
 }
 //----------------------------------------------------------------------------
-STDMETHODIMP MC_DropSource::GiveFeedback(DWORD vEffect)
+STDMETHODIMP MC_DropSource::GiveFeedback(DWORD)
 {
-	UNREFERENCED_PARAMETER(vEffect);
 	return DRAGDROP_S_USEDEFAULTCURSORS;
 }
 //----------------------------------------------------------------------------
