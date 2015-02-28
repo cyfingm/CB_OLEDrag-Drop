@@ -123,18 +123,18 @@ HRESULT __stdcall MC_DataObject::EnumDAdvise(IEnumSTATDATA **)
     return E_NOTIMPL;
 }
 //----------------------------------------------------------------------------
-int MC_DataObject::LookupFormatEtc(FORMATETC* vFormatEtc)
+int MC_DataObject::LookupFormatEtc(FORMATETC* vFormatEtc) const
 {
-    for(size_t i = 0; i < m_FormatEtc.size(); i++)
+	for (size_t i = 0; i < m_FormatEtc.size(); ++i)
 		{
-        if((m_FormatEtc[i].tymed & vFormatEtc->tymed)   &&
-            m_FormatEtc[i].cfFormat == vFormatEtc->cfFormat &&
-            m_FormatEtc[i].dwAspect == vFormatEtc->dwAspect)
+		if (	(m_FormatEtc[i].tymed & vFormatEtc->tymed)   &&
+			m_FormatEtc[i].cfFormat == vFormatEtc->cfFormat &&
+			m_FormatEtc[i].dwAspect == vFormatEtc->dwAspect)
 			{
-            return i;
+				return i;
 			}
 		}
-    return -1;
+	return -1;
 }
 //----------------------------------------------------------------------------
 void MC_DataObject::Add(FORMATETC *vFormatEtc, STGMEDIUM *vStorageMedium, UINT vCount = 1)
