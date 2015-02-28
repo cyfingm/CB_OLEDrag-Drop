@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 /*
 * 	@Author		:		陈艺夫
 * 	@Date		:		2015-2-27
@@ -8,23 +8,20 @@
 //----------------------------------------------------------------------------
 #include "MC_DataObject.h"
 //----------------------------------------------------------------------------
-MC_DataObject::MC_DataObject(void)
-:m_RefCount(1)
+MC_DataObject::MC_DataObject() : m_RefCount(1)
 {
-	;
 }
 //----------------------------------------------------------------------------
-MC_DataObject::~MC_DataObject(void)
+MC_DataObject::~MC_DataObject()
 {
-	;
 }
 //----------------------------------------------------------------------------
-ULONG __stdcall MC_DataObject::AddRef(void)
+ULONG __stdcall MC_DataObject::AddRef()
 {
 	return ++m_RefCount;
 }
 //----------------------------------------------------------------------------
-ULONG __stdcall MC_DataObject::Release(void)
+ULONG __stdcall MC_DataObject::Release()
 {
 	--m_RefCount;
 
@@ -36,31 +33,35 @@ ULONG __stdcall MC_DataObject::Release(void)
 //----------------------------------------------------------------------------
 STDMETHODIMP MC_DataObject::QueryInterface(REFIID vRIID, void** vPpvObject) 
 {
-	if((vRIID == IID_IUnknown)||(vRIID == IID_IDataObject))
+	if (!vPpvObject)
+		return E_POINTER;
+
+	if (vRIID == IID_IUnknown || vRIID == IID_IDataObject)
 		{
         *vPpvObject = this;
         AddRef();
         return S_OK;
 		}
-    else
-		{
+
         *vPpvObject = 0;
         return E_NOINTERFACE;
-		}
 }
 //----------------------------------------------------------------------------
 HRESULT __stdcall MC_DataObject::GetData(FORMATETC *vFormatEtc, STGMEDIUM *vStorageMedium)
 {
-	//Lookup for requierd format data object
-    int tIndex;
-    if(-1 == (tIndex = LookupFormatEtc(vFormatEtc)))
-        return DV_E_FORMATETC;
+	if (!vFormatEtc || !vStorageMedium)
+		return E_INVALIDARG;
 
-    vStorageMedium->tymed           = m_FormatEtc[tIndex].tymed;
-    vStorageMedium->pUnkForRelease  = 0;
+	//Lookup for requierd format data object
+	int tIndex = LookupFormatEtc(vFormatEtc);
+	if (tIndex == -1)
+		return DV_E_FORMATETC;
+
+	vStorageMedium->tymed           = m_FormatEtc[tIndex].tymed;
+	vStorageMedium->pUnkForRelease  = 0;
 
 	//Store data object to vStorageMedium
-    switch(m_FormatEtc[tIndex].tymed)
+	switch(m_FormatEtc[tIndex].tymed)
 		{
 		case TYMED_HGLOBAL:
 			vStorageMedium->hGlobal = DupGlobalMem(m_StgMedium[tIndex].hGlobal);
@@ -70,66 +71,70 @@ HRESULT __stdcall MC_DataObject::GetData(FORMATETC *vFormatEtc, STGMEDIUM *vStor
 			break;
 		default:
 			return DV_E_FORMATETC;
-    	}
-    return S_OK;
+		}
+
+	return S_OK;
 }
 //----------------------------------------------------------------------------
-HRESULT __stdcall MC_DataObject::GetDataHere(FORMATETC* vFormatEtc, STGMEDIUM* vStorageMedium)
+HRESULT __stdcall MC_DataObject::GetDataHere(FORMATETC *, STGMEDIUM *)
 {
 	return DATA_E_FORMATETC;
 }
 //----------------------------------------------------------------------------
 HRESULT __stdcall MC_DataObject::QueryGetData(FORMATETC *vFormatEtc)
 {
-    return (-1 == LookupFormatEtc(vFormatEtc)) ? DV_E_FORMATETC : S_OK;
+	if (!vFormatEtc)
+		return E_INVALIDARG;
+
+	return (-1 == LookupFormatEtc(vFormatEtc)) ? DV_E_FORMATETC : S_OK;
 }
 //----------------------------------------------------------------------------
-HRESULT __stdcall MC_DataObject::GetCanonicalFormatEtc(FORMATETC* vFormatEctIn, FORMATETC* vFormatEtcOut)
+HRESULT __stdcall MC_DataObject::GetCanonicalFormatEtc(FORMATETC *, FORMATETC *vFormatEtcOut)
 {
     vFormatEtcOut->ptd = 0;
     return E_NOTIMPL;
 }
 //----------------------------------------------------------------------------
-HRESULT __stdcall MC_DataObject::SetData(FORMATETC* vFormatEct, STGMEDIUM* vStorageMedium, BOOL vRelease)
+HRESULT __stdcall MC_DataObject::SetData(FORMATETC *, STGMEDIUM *, BOOL)
 {
     return E_NOTIMPL;
 }
 //----------------------------------------------------------------------------
-HRESULT __stdcall MC_DataObject::EnumFormatEtc(DWORD vDirection, IEnumFORMATETC** vPpEnumFormatEtc)
+HRESULT __stdcall MC_DataObject::EnumFormatEtc(DWORD vDirection, IEnumFORMATETC **vPpEnumFormatEtc)
 {
-	if(vDirection == DATADIR_GET)
-		return CreateEnumFormatEtc(m_FormatEtc.size(), &m_FormatEtc[0], vPpEnumFormatEtc);
+	if (vDirection == DATADIR_GET)
+		return vPpEnumFormatEtc ? CreateEnumFormatEtc(m_FormatEtc.size(), &m_FormatEtc[0], vPpEnumFormatEtc) : E_INVALIDARG;
 	else
-        return E_NOTIMPL;
+	        return E_NOTIMPL;
 }
 //----------------------------------------------------------------------------
-HRESULT __stdcall MC_DataObject::DAdvise(FORMATETC* vFormatEct, DWORD vAdvf, IAdviseSink* vAdvSink, DWORD* vConnection)
+HRESULT __stdcall MC_DataObject::DAdvise(FORMATETC *, DWORD, IAdviseSink *, DWORD *)
 {
     return E_NOTIMPL;
 }
 //----------------------------------------------------------------------------
-HRESULT __stdcall MC_DataObject::DUnadvise(DWORD vConnection)
+HRESULT __stdcall MC_DataObject::DUnadvise(DWORD)
 {
     return E_NOTIMPL;
 }
 //----------------------------------------------------------------------------
-HRESULT __stdcall MC_DataObject::EnumDAdvise(IEnumSTATDATA** vPpEnumAdvise)
+HRESULT __stdcall MC_DataObject::EnumDAdvise(IEnumSTATDATA **)
 {
     return E_NOTIMPL;
 }
 //----------------------------------------------------------------------------
-int MC_DataObject::LookupFormatEtc(FORMATETC* vFormatEtc)
+int MC_DataObject::LookupFormatEtc(FORMATETC* vFormatEtc) const
 {
-    for(size_t i = 0; i < m_FormatEtc.size(); i++)
+	for (size_t i = 0; i < m_FormatEtc.size(); ++i)
 		{
-        if((m_FormatEtc[i].tymed & vFormatEtc->tymed)   &&
-            m_FormatEtc[i].cfFormat == vFormatEtc->cfFormat &&
-            m_FormatEtc[i].dwAspect == vFormatEtc->dwAspect)
+		if (	(m_FormatEtc[i].tymed & vFormatEtc->tymed)   &&
+			m_FormatEtc[i].cfFormat == vFormatEtc->cfFormat &&
+			m_FormatEtc[i].dwAspect == vFormatEtc->dwAspect)
 			{
-            return i;
+				return i;
 			}
 		}
-    return -1;
+	return -1;
 }
 //----------------------------------------------------------------------------
 void MC_DataObject::Add(FORMATETC *vFormatEtc, STGMEDIUM *vStorageMedium, UINT vCount = 1)
@@ -174,12 +179,27 @@ void MC_DataObject::ClearAndRelease(void)
 //----------------------------------------------------------------------------
 HGLOBAL MC_DataObject::DupGlobalMem(HGLOBAL vSourceMem)
 {
-	DWORD tLen    = GlobalSize(vSourceMem);
-	PVOID tSource = GlobalLock(vSourceMem);
-	PVOID tDest   = GlobalAlloc(GMEM_FIXED, tLen);
-	memcpy (tDest, tSource, tLen);
-    GlobalUnlock(vSourceMem);
-	return tDest;
+	PVOID tDest = 0, tSource = 0;
+	
+	try
+	{
+		DWORD tLen = GlobalSize(vSourceMem);
+		tSource    = GlobalLock(vSourceMem);
+		tDest      = GlobalAlloc(GMEM_FIXED, tLen);
+
+		std::memcpy(tDest, tSource, tLen);
+		GlobalUnlock(vSourceMem);
+
+		return tDest;
+	}
+	catch(...)
+	{
+		if (tDest)
+			GlobalFree(tDest);
+		if (tSource)
+			GlobalUnlock(vSourceMem);
+		throw;
+	}
 }
 //----------------------------------------------------------------------------
 HRESULT MC_DataObject::CreateEnumFormatEtc(UINT vFormatCount, FORMATETC* vFormat, IEnumFORMATETC** vPpEnumFormatEtc)

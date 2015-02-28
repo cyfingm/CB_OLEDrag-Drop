@@ -8,11 +8,10 @@
 #include "MC_EnumFormatEtc.h"
 //----------------------------------------------------------------------------
 MC_EnumFormatEtc::MC_EnumFormatEtc(FORMATETC* vFormatEtc, ULONG vFormatsCount)
-:m_RefCount(1),m_Index(0),m_FormatsCount(vFormatsCount)
+: m_RefCount(1), m_Index(0), m_FormatsCount(vFormatsCount),
+  m_FormatEtc(new FORMATETC[vFormatsCount])
 {
-    m_FormatEtc = new FORMATETC[vFormatsCount];
-
-    for(ULONG i = 0; i < vFormatsCount; i++)
+    for (ULONG i = 0; i < vFormatsCount; ++i)
         DeepCopyFormatEtc(&m_FormatEtc[i], &vFormatEtc[i]);
 }
 //----------------------------------------------------------------------------
@@ -28,12 +27,12 @@ MC_EnumFormatEtc::~MC_EnumFormatEtc()
     delete[] m_FormatEtc;
 }
 //----------------------------------------------------------------------------
-ULONG __stdcall MC_EnumFormatEtc::AddRef(void)
+ULONG __stdcall MC_EnumFormatEtc::AddRef()
 {
 	return ++m_RefCount;
 }
 //----------------------------------------------------------------------------
-ULONG __stdcall MC_EnumFormatEtc::Release(void)
+ULONG __stdcall MC_EnumFormatEtc::Release()
 {
 	--m_RefCount;
 
@@ -45,7 +44,7 @@ ULONG __stdcall MC_EnumFormatEtc::Release(void)
 //----------------------------------------------------------------------------
 STDMETHODIMP MC_EnumFormatEtc::QueryInterface(REFIID vRIID, void** vPpvObject) 
 {
-	if((vRIID == IID_IUnknown)||(vRIID == IID_IDataObject))
+	if (vRIID == IID_IUnknown || vRIID == IID_IDataObject)
 		{
         *vPpvObject = this;
         AddRef();
@@ -92,7 +91,7 @@ HRESULT __stdcall MC_EnumFormatEtc::Skip(ULONG vCelt)
     return (m_Index <= m_FormatsCount) ? S_OK : S_FALSE;
 }
 //----------------------------------------------------------------------------
-HRESULT __stdcall MC_EnumFormatEtc::Reset(void)
+HRESULT __stdcall MC_EnumFormatEtc::Reset()
 {
     m_Index = 0;
     return S_OK;
@@ -110,7 +109,7 @@ HRESULT __stdcall MC_EnumFormatEtc::Clone(IEnumFORMATETC** vPpEnumFormatEtc)
 //----------------------------------------------------------------------------
 HRESULT MC_EnumFormatEtc::CreateEnumFormatEtc(UINT vFormatCount, FORMATETC* vFormat, IEnumFORMATETC** vPpEnumFormatEtc)
 {
-	if(vFormatCount == 0||vFormat == 0||vPpEnumFormatEtc == 0)
+	if (vFormatCount == 0||vFormat == 0||vPpEnumFormatEtc == 0)
         return E_INVALIDARG;
 
     *vPpEnumFormatEtc = new MC_EnumFormatEtc(vFormat, vFormatCount);

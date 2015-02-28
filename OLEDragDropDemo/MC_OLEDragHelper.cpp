@@ -10,19 +10,19 @@
 void* MC_DropFileListA::GetFileDescription(void)
 {
 	struct TMyDropFiles{
-        DWORD pFiles;
-        POINT pt;
+		DWORD pFiles;
+		POINT pt;
 		BOOL  fNC;
 		BOOL  fWide;
-        char  szFiles[1];
-    };
+        	char  szFiles[1];
+	};
 
 	//Get file descrpition length
-    size_t tFileDescriptionLength=0;
-	for(iterator i = begin();i != end(); i++)
+	size_t tFileDescriptionLength=0;
+	for(const_iterator i = begin(); i != end(); ++i)
 		{
 		tFileDescriptionLength += i->length();
-        tFileDescriptionLength++;
+		++tFileDescriptionLength;
 		}
 
 	//Ready a TMyDropFiles(A structure like DROPFILES, but I always get failed when using DROPFILES)
@@ -35,12 +35,12 @@ void* MC_DropFileListA::GetFileDescription(void)
 	//Fill the filenames
 	char *fileListString = tFileNames->szFiles;
 	size_t tLen = 0;
-    for(iterator i = begin();i != end(); i++)
+	for(const_iterator i = begin();i != end(); ++i)
 		{
 		tLen = i->length();
 		CopyMemory(fileListString, i->c_str(), tLen);
 		fileListString += tLen;
-        *(fileListString++) = 0;
+		*(fileListString++) = 0;
 		}
 	//Shoul terminate with two 0
 	*fileListString = 0;
@@ -54,7 +54,7 @@ bool MC_OLEDragHelper::DropFiles(MC_DropFileListA vFileList, DWORD vDesireEffect
 	STGMEDIUM tStorageMedium = {TYMED_HGLOBAL, {(HBITMAP)vFileList.GetFileDescription()}, 0};
 
 	IDropSource *tDropSource   = new MC_DropSource();
-    MC_DataObject *tDataObject = new MC_DataObject();
+	MC_DataObject *tDataObject = new MC_DataObject();
 
 	//Operation like setData
 	tDataObject->Add(&tFormatEtc, &tStorageMedium, 1);

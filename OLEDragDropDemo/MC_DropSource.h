@@ -15,8 +15,8 @@ class MC_DropSource : public IDropSource
 {
 public:
 	//COM intreface
-	ULONG __stdcall AddRef			(void);
-	ULONG __stdcall Release			(void);
+	ULONG __stdcall AddRef			();
+	ULONG __stdcall Release			();
 	STDMETHODIMP 	QueryInterface	(REFIID vRIID, void **vPpvObject);
 
     //IDropSource interface

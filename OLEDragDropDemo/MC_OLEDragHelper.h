@@ -18,19 +18,13 @@ struct MC_DropFileListA : std::vector<std::string>
 {
 public:
 	//Help with fill the STGMEDIUM`s hGlobal member
-	void* GetFileDescription(void);
-
-	MC_DropFileListA(void){;};
-	~MC_DropFileListA(void){;};
+	void *GetFileDescription();
 };
 //----------------------------------------------------------------------------
 //This class is useful when doing ole drag&drop operation, but it`s not completely implement,by mow just support file drag&drop
 class MC_OLEDragHelper
 {
 public:
-	MC_OLEDragHelper(void){;};
-	~MC_OLEDragHelper(void){;};
-
 	bool IsDropSuccess(DWORD vDropResult, DWORD vDropEffect);
 
 	bool DropFiles(MC_DropFileListA vFileList, DWORD vDesireEffect); //For file drag&drop
