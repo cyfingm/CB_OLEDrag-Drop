@@ -1,0 +1,1 @@
+This repo contains a demo to show how to implement ole drag&drop operation in C++ builder.
