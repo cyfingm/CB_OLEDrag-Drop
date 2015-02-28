@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 /*
 * 	@Author		:		陈艺夫
 * 	@Date		:		2015-2-27
@@ -16,12 +16,12 @@ MC_DataObject::~MC_DataObject()
 {
 }
 //----------------------------------------------------------------------------
-ULONG __stdcall MC_DataObject::AddRef(void)
+ULONG __stdcall MC_DataObject::AddRef()
 {
 	return ++m_RefCount;
 }
 //----------------------------------------------------------------------------
-ULONG __stdcall MC_DataObject::Release(void)
+ULONG __stdcall MC_DataObject::Release()
 {
 	--m_RefCount;
 
