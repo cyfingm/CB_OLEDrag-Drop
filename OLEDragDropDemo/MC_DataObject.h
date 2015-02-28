@@ -17,8 +17,8 @@ class MC_DataObject : public IDataObject
 {
 public:
 	//COM interface
-	ULONG __stdcall AddRef			(void);
-	ULONG __stdcall Release			(void);
+	ULONG __stdcall AddRef			();
+	ULONG __stdcall Release			();
 	STDMETHODIMP	QueryInterface	(REFIID vRIID, void** vPpvObject);
 
 	//IDataObject interface
@@ -33,15 +33,15 @@ public:
 	STDMETHODIMP EnumDAdvise			(IEnumSTATDATA** vPpEnumAdvise);
 
 	//Cons/Destructors
-	MC_DataObject(void);
-	~MC_DataObject(void);
+	MC_DataObject();
+	~MC_DataObject();
 
 	void	Add				(FORMATETC* vFormatEtc, STGMEDIUM* vStorageMedium, UINT vCount);
 	void	Add				(CLIPFORMAT vClipboardFormat, DWORD vTymed, void* vUnionContent);
-	size_t	Size			(void);
-	bool	Empty			(void);
-	void	Clear			(void);
-	void	ClearAndRelease	(void);
+	size_t	Size			();
+	bool	Empty			();
+	void	Clear			();
+	void	ClearAndRelease	();
 
 private:
 	HGLOBAL DupGlobalMem	(HGLOBAL vSourceMem);
