@@ -53,6 +53,9 @@ STDMETHODIMP MC_DropSource::QueryInterface(REFIID vRIID, void **vPpvObject)
 		}
 }
 //----------------------------------------------------------------------------
+// Determines whether a drag-and-drop operation should be continued,
+// canceled, or completed. You do not call this method directly. The OLE
+// DoDragDrop function calls this method during a drag-and-drop operation.
 STDMETHODIMP MC_DropSource::QueryContinueDrag(BOOL vEscapePressed, DWORD vKeyState)
 {
 	return vEscapePressed ? DRAGDROP_S_CANCEL : ((vKeyState&MK_LBUTTON) ? S_OK : DRAGDROP_S_DROP);
