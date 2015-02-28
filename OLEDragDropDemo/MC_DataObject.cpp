@@ -83,7 +83,7 @@ HRESULT __stdcall MC_DataObject::GetDataHere(FORMATETC *, STGMEDIUM *)
 //----------------------------------------------------------------------------
 HRESULT __stdcall MC_DataObject::QueryGetData(FORMATETC *vFormatEtc)
 {
-	if (!v_format_etc)
+	if (!vFormatEtc)
 		return E_INVALIDARG;
 
 	return (-1 == LookupFormatEtc(vFormatEtc)) ? DV_E_FORMATETC : S_OK;
