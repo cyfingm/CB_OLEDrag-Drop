@@ -35,8 +35,11 @@ ULONG __stdcall MC_DropSource::Release()
 }
 //----------------------------------------------------------------------------
 //COM 接口成员:QueryInterface
-STDMETHODIMP MC_DropSource::QueryInterface(REFIID vRIID, void** vPpvObject) 
+STDMETHODIMP MC_DropSource::QueryInterface(REFIID vRIID, void **vPpvObject)
 {
+	if (!vPpvObject)
+		return E_POINTER;
+
 	if (vRIID == IID_IUnknown || vRIID == IID_IDataObject)
 		{
         *vPpvObject = this;
